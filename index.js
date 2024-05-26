@@ -131,3 +131,27 @@ const pledgeInput2 = document.getElementById("pledgeInput2");
 const pledgeInput3 = document.getElementById("pledgeInput3");
 
 //  Add event listeners for input changes
+
+pledgeInput1.addEventListener("input", function () {
+  const enteredAmount = parseInt(this.value);
+  const backedAmount = document.querySelector(
+    ".main--range-items li:first-child h2"
+  );
+  backedAmount.textContent = `$${enteredAmount.toLocaleString()}`;
+});
+
+pledgeInput2.addEventListener("input", function () {
+  const enteredAmount = parseInt(this.value);
+  const backedAmount = document.querySelector(
+    ".main--range-items li:first-child h2"
+  );
+  backedAmount.textContent = `$${enteredAmount.toLocaleString()}`;
+});
+
+pledgeInput3.addEventListener("input", function () {
+  const enteredAmount = parseInt(this.value);
+  const backedAmount = document.querySelector(
+    ".main--range-items li:first-child h2"
+  );
+  backedAmount.textContent = `$${enteredAmount.toLocaleString()}`;
+});
