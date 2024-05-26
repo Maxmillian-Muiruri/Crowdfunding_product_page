@@ -121,3 +121,13 @@ pledgeInput.addEventListener("input", function () {
   );
   backedAmount.textContent = `$${enteredAmount.toLocaleString()}`;
 });
+
+let pledgeInputss = document.querySelector(
+  ".modal--box-footer .quantity input"
+);
+
+const pledgeInput1 = document.getElementById("pledgeInput1");
+const pledgeInput2 = document.getElementById("pledgeInput2");
+const pledgeInput3 = document.getElementById("pledgeInput3");
+
+//  Add event listeners for input changes
