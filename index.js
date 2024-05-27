@@ -125,12 +125,12 @@ function getPledgedAmount() {
   return pledgedAmount ? parseInt(pledgedAmount) : 0;
 }
 
-// Function to set pledged amount to localStorage
+/* Function to set pledged amount to localStorage */
 function setPledgedAmount(amount) {
   localStorage.setItem("pledgedAmount", amount);
 }
 
-// Function to update backed amount and progress bar
+/* Function to update backed amount and progress bar*/
 function updateBackedAmount() {
   const pledgedAmount = getPledgedAmount();
   const backedAmount = document.querySelector(
