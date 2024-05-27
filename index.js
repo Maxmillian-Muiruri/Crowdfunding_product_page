@@ -6,9 +6,21 @@ const priceBtn = document.querySelectorAll("#continueBtn");
 const support = document.querySelector(".support");
 const daysLeft = document.getElementById("daysleft");
 
+// Set the target amount
+const targetAmount = 100000;
+
+// Function to update the progress bar
+function updateProgressBar() {
+  const backedAmount = document.getElementById("backedAmount");
+  const currentAmount = getPledgedAmount();
+  const percentage = (currentAmount * 100) / targetAmount;
+  const progressBar = document.getElementById("myBar");
+  progressBar.style.width = `${percentage}%`;
+}
+
 function updateCountdown() {
   const today = new Date();
-  let targetDate = new Date(today.getFullYear(), 8, 17); // september 17th of the current year
+  let targetDate = new Date(today.getFullYear(), 8, 17); // September 17th of the current year
   // If today is past September 17th, set the target date to next year
   if (today > targetDate) {
     targetDate.setFullYear(today.getFullYear() + 1);
@@ -107,51 +119,56 @@ hamburger.addEventListener("click", () => {
   menu.classList.toggle("active");
 });
 
-// Select the input field in the modal
-let pledgeInput = document.querySelector(".modal--box-footer .quantity input");
+// Function to get pledged amount from localStorage
+function getPledgedAmount() {
+  const pledgedAmount = localStorage.getItem("pledgedAmount");
+  return pledgedAmount ? parseInt(pledgedAmount) : 0;
+}
 
-// Add event listener for input changes
-pledgeInput.addEventListener("input", function () {
-  // Get the entered amount
-  const enteredAmount = parseInt(this.value);
+// Function to set pledged amount to localStorage
+function setPledgedAmount(amount) {
+  localStorage.setItem("pledgedAmount", amount);
+}
 
-  // Update the backed amount in the main--range
+// Function to update backed amount and progress bar
+function updateBackedAmount() {
+  const pledgedAmount = getPledgedAmount();
   const backedAmount = document.querySelector(
     ".main--range-items li:first-child h2"
   );
-  backedAmount.textContent = `$${enteredAmount.toLocaleString()}`;
-});
+  backedAmount.textContent = `$${pledgedAmount.toLocaleString()}`;
+  updateProgressBar();
+}
 
-let pledgeInputss = document.querySelector(
+// Function to handle pledge input changes
+function handlePledgeInputChange() {
+  const pledgeInputs = document.querySelectorAll(
+    ".modal--box-footer .quantity input"
+  );
+  let totalPledgedAmount = 0;
+
+  pledgeInputs.forEach((input) => {
+    const enteredAmount = parseInt(input.value) || 0;
+    totalPledgedAmount += enteredAmount;
+  });
+
+  // Save the total pledged amount to localStorage
+  setPledgedAmount(totalPledgedAmount);
+
+  // Update the backed amount and progress bar
+  updateBackedAmount();
+}
+
+// Add event listeners for input changes
+const pledgeInputs = document.querySelectorAll(
   ".modal--box-footer .quantity input"
 );
-
-const pledgeInput1 = document.getElementById("pledgeInput1");
-const pledgeInput2 = document.getElementById("pledgeInput2");
-const pledgeInput3 = document.getElementById("pledgeInput3");
-
-//  Add event listeners for input changes
-
-pledgeInput1.addEventListener("input", function () {
-  const enteredAmount = parseInt(this.value);
-  const backedAmount = document.querySelector(
-    ".main--range-items li:first-child h2"
-  );
-  backedAmount.textContent = `$${enteredAmount.toLocaleString()}`;
+pledgeInputs.forEach((input) => {
+  input.addEventListener("input", handlePledgeInputChange);
 });
 
-pledgeInput2.addEventListener("input", function () {
-  const enteredAmount = parseInt(this.value);
-  const backedAmount = document.querySelector(
-    ".main--range-items li:first-child h2"
-  );
-  backedAmount.textContent = `$${enteredAmount.toLocaleString()}`;
-});
-
-pledgeInput3.addEventListener("input", function () {
-  const enteredAmount = parseInt(this.value);
-  const backedAmount = document.querySelector(
-    ".main--range-items li:first-child h2"
-  );
-  backedAmount.textContent = `$${enteredAmount.toLocaleString()}`;
+// Initialize backed amount and progress bar on page load
+document.addEventListener("DOMContentLoaded", function () {
+  updateBackedAmount();
+  handlePledgeInputChange();
 });
