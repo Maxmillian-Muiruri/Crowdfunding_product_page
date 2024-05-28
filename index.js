@@ -7,7 +7,7 @@ const support = document.querySelector(".support");
 const daysLeft = document.getElementById("daysleft");
 
 // Set the target amount
-const targetAmount = 100000;
+const targetAmount = 10000;
 
 // Function to update the progress bar
 function updateProgressBar() {
