@@ -188,7 +188,7 @@ function getBackers() {
 function updateTotalBackers() {
   const oldBackers = getBackers();
   localStorage.getItem("getBackers", oldBackers);
-  const newBackers = parseInt(newBackers) + 1;
+  const newBackers = parseInt(oldBackers) + 1;
   localStorage.setItem("totalBackers", newBackers);
 
   let myBackers = document.getElementById("backers");
