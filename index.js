@@ -33,6 +33,7 @@ function updateCountdown() {
 // Call the function to set the initial countdown value
 updateCountdown();
 // Update the countdown every 24 hours (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)
+
 setInterval(updateCountdown, 1000 * 60 * 60 * 24);
 
 let i = 0;
@@ -64,6 +65,7 @@ radioBtn.forEach((btn, i) => {
 
     if (currentValue === 0) {
       /*console.log(rangeBtn);*/
+
       rangeBtn.setAttribute("value", 25);
     }
     if (currentValue === 1) {
@@ -120,6 +122,7 @@ hamburger.addEventListener("click", () => {
 });
 
 /* Function to set pledged amount to localStorage */
+
 function setPledgedAmount(amount) {
   localStorage.setItem("pledgedAmount", amount);
   // localStorage.setItem("backers", amount);
@@ -139,6 +142,19 @@ function updateBackedAmount() {
   updateProgressBar(pledgedAmount);
 }
 updateBackedAmount();
+
+// Initialize backed amount and progress bar on page load
+document.addEventListener("DOMContentLoaded", function () {
+  updateBackedAmount();
+  // Clear input fields when the page loads
+  const pledgeInputs = document.querySelectorAll(
+    ".modal--box-footer .quantity input"
+  );
+  pledgeInputs.forEach((input) => {
+    input.value = "";
+  });
+});
+
 // function  to get and set backers
 function getBackers() {
   // Check if "totalBackers" is already set in localStorage
@@ -172,18 +188,19 @@ function getBackers() {
 function updateTotalBackers() {
   const oldBackers = getBackers();
   localStorage.getItem("getBackers", oldBackers);
-  const newBackers = parseInt(oldBackers) + 1;
+  const newBackers = parseInt(newBackers) + 1;
   localStorage.setItem("totalBackers", newBackers);
 
   let myBackers = document.getElementById("backers");
   myBackers.innerHTML = newBackers;
 
-  // updateBackers.textContent = `$${pledgedAmount.toLocaleString()}`;
-  // updateProgressBar();
+  updateBackers.textContent = `$${pledgedAmount.toLocaleString()}`;
+  updateProgressBar();
 }
 
-getBackers();
 updateTotalBackers();
+// getBackers();
+// updateTotalBackers();
 
 // Function to handle pledge input changes
 function handlePledgeInputChange() {
