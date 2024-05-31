@@ -119,26 +119,71 @@ hamburger.addEventListener("click", () => {
   menu.classList.toggle("active");
 });
 
+/* Function to set pledged amount to localStorage */
+function setPledgedAmount(amount) {
+  localStorage.setItem("pledgedAmount", amount);
+  // localStorage.setItem("backers", amount);
+}
+
 // Function to get pledged amount from localStorage
 function getPledgedAmount() {
   const pledgedAmount = localStorage.getItem("pledgedAmount");
   return pledgedAmount ? parseInt(pledgedAmount) : 0;
 }
 
-/* Function to set pledged amount to localStorage */
-function setPledgedAmount(amount) {
-  localStorage.setItem("pledgedAmount", amount);
-}
-
 /* Function to update backed amount and progress bar*/
 function updateBackedAmount() {
   const pledgedAmount = getPledgedAmount();
-  const backedAmount = document.querySelector(
-    ".main--range-items li:first-child h2"
-  );
+  const backedAmount = document.getElementById("backedAmount");
   backedAmount.textContent = `$${pledgedAmount.toLocaleString()}`;
-  updateProgressBar();
+  updateProgressBar(pledgedAmount);
 }
+updateBackedAmount();
+// function  to get and set backers
+function getBackers() {
+  // Check if "totalBackers" is already set in localStorage
+  let totalBackers = localStorage.getItem("totalBackers");
+  if (totalBackers === null) {
+    totalBackers = 0;
+    localStorage.setItem("totalBackers", totalBackers);
+  } else {
+    totalBackers = parseInt(totalBackers, 10);
+    if (isNaN(totalBackers)) {
+      totalBackers = 0;
+      localStorage.setItem("totalBackers", totalBackers);
+    }
+  }
+
+  let myBackers = document.getElementById("backers");
+
+  myBackers.innerHTML = totalBackers;
+
+  // Return the total backers count
+  return totalBackers;
+  // const backers = localStorage.getItem()
+
+  // localStorage.setItem("backers", 0);
+
+  // myBackers.innerHTML = localStorage.getItem("backers");
+
+  // return backers ? parseInt(backers) : 0;
+}
+
+function updateTotalBackers() {
+  const oldBackers = getBackers();
+  localStorage.getItem("getBackers", oldBackers);
+  const newBackers = parseInt(oldBackers) + 1;
+  localStorage.setItem("totalBackers", newBackers);
+
+  let myBackers = document.getElementById("backers");
+  myBackers.innerHTML = newBackers;
+
+  // updateBackers.textContent = `$${pledgedAmount.toLocaleString()}`;
+  // updateProgressBar();
+}
+
+getBackers();
+updateTotalBackers();
 
 // Function to handle pledge input changes
 function handlePledgeInputChange() {
