@@ -257,9 +257,10 @@ body {
 }
 
 #myBar {
-  width: 1%;
   height: 30px;
   background-color: #04aa6d;
+  max-width: calc(100% - 20px);
+  width: calc(100% - 20px);
 }
 input[type="range"] {
   width: 100%;
