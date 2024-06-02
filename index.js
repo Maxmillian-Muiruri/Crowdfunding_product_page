@@ -178,7 +178,7 @@ function handlePledgeInputChange(event) {
     updateBackedAmount();
     incrementBackers();
 
-    input.value = ""; // Clear input after adding to total
+    input.value = "";
   }
 }
 
@@ -193,5 +193,5 @@ pledgeInputs.forEach((input) => {
 // Initialize backed amount and progress bar on page load
 document.addEventListener("DOMContentLoaded", function () {
   updateBackedAmount();
-  getBackers(); // Ensure backers count is displayed correctly on page load
+  getBackers();
 });
