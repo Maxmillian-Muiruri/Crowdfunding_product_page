@@ -7,13 +7,13 @@ const support = document.querySelector(".support");
 const daysLeft = document.getElementById("daysleft");
 
 // Set the target amount
-const targetAmount = 10000;
+const targetAmount = 1000000;
 
 // Function to update the progress bar
 function updateProgressBar() {
   const backedAmount = document.getElementById("backedAmount");
   const currentAmount = getPledgedAmount();
-  const percentage = (currentAmount * 100) / targetAmount;
+  const percentage = (currentAmount / targetAmount) * 100;
   const progressBar = document.getElementById("myBar");
   progressBar.style.width = `${percentage}%`;
 }
@@ -30,26 +30,28 @@ function updateCountdown() {
   document.getElementById("daysleft").textContent = daysLeft;
 }
 
-// Call the function to set the initial countdown value
 updateCountdown();
 // Update the countdown every 24 hours (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)
 setInterval(updateCountdown, 1000 * 60 * 60 * 24);
 
-let i = 0;
 function move() {
-  if (i == 0) {
-    i = 1;
-    let elem = document.getElementById("myBar");
-    let width = 1;
-    let id = setInterval(frame, 10);
-    function frame() {
-      if (width >= 100) {
-        clearInterval(id);
-        i = 0;
-      } else {
-        width++;
-        elem.style.width = width + "%";
-      }
+  const progressBar = document.getElementById("myBar");
+  const currentAmount = getPledgedAmount();
+  const percentage = (currentAmount / targetAmount) * 100;
+
+  let width = parseInt(progressBar.style.width) || 0; // Get current width or default to 0
+  const targetWidth = percentage;
+  const step = 0.1;
+  const intervalTime = 10;
+
+  // Increase or decrease width based on the percentage
+  let id = setInterval(frame, intervalTime);
+  function frame() {
+    if (width >= targetWidth) {
+      clearInterval(id);
+    } else {
+      width += step;
+      progressBar.style.width = width + "%";
     }
   }
 }
@@ -181,6 +183,19 @@ function handlePledgeInputChange(event) {
     input.value = "";
   }
 }
+
+// Function to clear localStorage
+function clearLocalStorage() {
+  localStorage.removeItem("pledgedAmount");
+  localStorage.removeItem("totalBackers");
+}
+
+// Initialize backed amount and progress bar on page load
+document.addEventListener("DOMContentLoaded", function () {
+  clearLocalStorage(); // Clear localStorage
+  updateBackedAmount();
+  getBackers();
+});
 
 // Add event listeners for input changes
 const pledgeInputs = document.querySelectorAll(
