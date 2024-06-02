@@ -33,7 +33,6 @@ function updateCountdown() {
 // Call the function to set the initial countdown value
 updateCountdown();
 // Update the countdown every 24 hours (1000 milliseconds * 60 seconds * 60 minutes * 24 hours)
-
 setInterval(updateCountdown, 1000 * 60 * 60 * 24);
 
 let i = 0;
@@ -64,14 +63,11 @@ radioBtn.forEach((btn, i) => {
     let currentValue = i;
 
     if (currentValue === 0) {
-      /*console.log(rangeBtn);*/
-
       rangeBtn.setAttribute("value", 25);
     }
     if (currentValue === 1) {
       rangeBtn.setAttribute("value", 50);
     }
-
     if (currentValue === 2) {
       rangeBtn.setAttribute("value", 75);
     }
@@ -117,15 +113,12 @@ const menu = document.querySelector(".menu");
 
 hamburger.addEventListener("click", () => {
   hamburger.classList.toggle("close-menu");
-
   menu.classList.toggle("active");
 });
 
-/* Function to set pledged amount to localStorage */
-
+// Function to set pledged amount to localStorage
 function setPledgedAmount(amount) {
   localStorage.setItem("pledgedAmount", amount);
-  // localStorage.setItem("backers", amount);
 }
 
 // Function to get pledged amount from localStorage
@@ -134,30 +127,16 @@ function getPledgedAmount() {
   return pledgedAmount ? parseInt(pledgedAmount) : 0;
 }
 
-/* Function to update backed amount and progress bar*/
+// Function to update backed amount and progress bar
 function updateBackedAmount() {
   const pledgedAmount = getPledgedAmount();
   const backedAmount = document.getElementById("backedAmount");
   backedAmount.textContent = `$${pledgedAmount.toLocaleString()}`;
-  updateProgressBar(pledgedAmount);
+  updateProgressBar();
 }
-updateBackedAmount();
 
-// Initialize backed amount and progress bar on page load
-document.addEventListener("DOMContentLoaded", function () {
-  updateBackedAmount();
-  // Clear input fields when the page loads
-  const pledgeInputs = document.querySelectorAll(
-    ".modal--box-footer .quantity input"
-  );
-  pledgeInputs.forEach((input) => {
-    input.value = "";
-  });
-});
-
-// function  to get and set backers
+// Function to get backers count from localStorage
 function getBackers() {
-  // Check if "totalBackers" is already set in localStorage
   let totalBackers = localStorage.getItem("totalBackers");
   if (totalBackers === null) {
     totalBackers = 0;
@@ -171,54 +150,36 @@ function getBackers() {
   }
 
   let myBackers = document.getElementById("backers");
-
   myBackers.innerHTML = totalBackers;
 
-  // Return the total backers count
   return totalBackers;
-  // const backers = localStorage.getItem()
-
-  // localStorage.setItem("backers", 0);
-
-  // myBackers.innerHTML = localStorage.getItem("backers");
-
-  // return backers ? parseInt(backers) : 0;
 }
 
-function updateTotalBackers() {
-  const oldBackers = getBackers();
-  localStorage.getItem("getBackers", oldBackers);
-  const newBackers = parseInt(oldBackers) + 1;
-  localStorage.setItem("totalBackers", newBackers);
+// Function to increment total backers count
+function incrementBackers() {
+  let totalBackers = getBackers();
+  totalBackers += 1;
+  localStorage.setItem("totalBackers", totalBackers);
 
   let myBackers = document.getElementById("backers");
-  myBackers.innerHTML = newBackers;
-
-  updateBackers.textContent = `$${pledgedAmount.toLocaleString()}`;
-  updateProgressBar();
+  myBackers.innerHTML = totalBackers;
 }
 
-updateTotalBackers();
-// getBackers();
-// updateTotalBackers();
-
 // Function to handle pledge input changes
-function handlePledgeInputChange() {
-  const pledgeInputs = document.querySelectorAll(
-    ".modal--box-footer .quantity input"
-  );
-  let totalPledgedAmount = 0;
+function handlePledgeInputChange(event) {
+  const input = event.target;
+  const enteredAmount = parseInt(input.value) || 0;
 
-  pledgeInputs.forEach((input) => {
-    const enteredAmount = parseInt(input.value) || 0;
-    totalPledgedAmount += enteredAmount;
-  });
+  if (enteredAmount > 0) {
+    const currentPledgedAmount = getPledgedAmount();
+    const newPledgedAmount = currentPledgedAmount + enteredAmount;
 
-  // Save the total pledged amount to localStorage
-  setPledgedAmount(totalPledgedAmount);
+    setPledgedAmount(newPledgedAmount);
+    updateBackedAmount();
+    incrementBackers();
 
-  // Update the backed amount and progress bar
-  updateBackedAmount();
+    input.value = ""; // Clear input after adding to total
+  }
 }
 
 // Add event listeners for input changes
@@ -226,11 +187,11 @@ const pledgeInputs = document.querySelectorAll(
   ".modal--box-footer .quantity input"
 );
 pledgeInputs.forEach((input) => {
-  input.addEventListener("input", handlePledgeInputChange);
+  input.addEventListener("change", handlePledgeInputChange);
 });
 
 // Initialize backed amount and progress bar on page load
 document.addEventListener("DOMContentLoaded", function () {
   updateBackedAmount();
-  handlePledgeInputChange();
+  getBackers(); // Ensure backers count is displayed correctly on page load
 });
